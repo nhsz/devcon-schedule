@@ -16,7 +16,7 @@ export const getStaticProps: GetStaticProps = async context => {
   }
 
   const criteria = function (a: any, b: any) {
-    return a.slot.start - b.slot.start;
+    return a.slot.start < b.slot.start ? -1 : a.date > b.date ? 1 : 0;
   };
 
   return {
