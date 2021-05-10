@@ -1,4 +1,5 @@
 import { Box, Heading, Stack, Text } from '@chakra-ui/react';
+import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
 
 const Talk = ({ info }: { info: any }) => {
@@ -36,8 +37,8 @@ const Talk = ({ info }: { info: any }) => {
         </Text>
 
         <Box position='absolute' bottom={4} right={0} background='black' p={1} w='52px'>
-          <Text color='white'>
-            {time.getHours()}:{time.getMinutes()}
+          <Text color='white' textAlign='center'>
+            {dayjs(time).format('HH:mm')}
           </Text>
         </Box>
       </Stack>
