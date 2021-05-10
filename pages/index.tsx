@@ -45,7 +45,7 @@ const Home = () => {
 
       <main>
         <Stack direction='row' justifyContent='center' marginTop={6} marginBottom={12}>
-          <Heading as='h1' size='xl'>
+          <Heading as='h1' size='2xl'>
             Devcon Schedule
           </Heading>
         </Stack>
