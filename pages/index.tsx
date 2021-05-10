@@ -3,7 +3,6 @@ import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
 import { ConferenceDay, Layout } from '../components';
-import { useSelectedStore } from '../store';
 
 export const getStaticProps: GetStaticProps = async context => {
   const res = await fetch('https://pretalx.com/api/events/democon/talks/');
@@ -27,8 +26,6 @@ export const getStaticProps: GetStaticProps = async context => {
 
 const Home = ({ results }: { results: any }) => {
   const [selectedDay, setSelectedDay] = useState(1);
-  const setTalks = useSelectedStore(state => state.setTalks);
-  setTalks(results);
 
   return (
     <div>

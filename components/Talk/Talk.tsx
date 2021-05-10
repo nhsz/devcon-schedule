@@ -1,9 +1,7 @@
 import { Box, Heading, Stack, Text } from '@chakra-ui/react';
 import { useRouter } from 'next/router';
-import { useSelectedStore } from '../../store';
 
 const Talk = ({ info }: { info: any }) => {
-  const setSelected = useSelectedStore(state => state.setSelected);
   const router = useRouter();
   const time = new Date(info.slot.start);
 
@@ -11,7 +9,6 @@ const Talk = ({ info }: { info: any }) => {
     <Box
       cursor='pointer'
       onClick={() => {
-        setSelected(info.code);
         router.push({ pathname: `/detail/${info.code}` });
       }}
       position='relative'
