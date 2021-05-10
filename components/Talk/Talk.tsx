@@ -12,7 +12,7 @@ const Talk = ({ info }: { info: any }) => {
       cursor='pointer'
       onClick={() => {
         setSelected(info.code);
-        router.push(`/detail/${info.code}`);
+        router.push({ pathname: `/detail/${info.code}` });
       }}
       position='relative'
     >
