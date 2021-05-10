@@ -19,7 +19,11 @@ const Talk = ({ info }: { info: any }) => {
         </Heading>
         <Text fontWeight={500}>
           {info.speakers.length > 1
-            ? info.speakers.map((speaker: any) => <span key={speaker.name}>{speaker.name} & </span>)
+            ? info.speakers.map((speaker: any, idx: number, arr: any[]) => (
+                <span key={speaker.name}>
+                  {speaker.name} {idx < arr.length - 1 ? '&' : ''}{' '}
+                </span>
+              ))
             : info.speakers[0].name}
         </Text>
 
