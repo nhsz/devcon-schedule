@@ -12,8 +12,16 @@ const Talk = ({ info }: { info: any }) => {
         router.push({ pathname: `/detail/${info.code}` });
       }}
       position='relative'
+      mb={1}
     >
-      <Stack mb={4} p={3} border='1px' borderRadius={6} w={{ base: 80, md: '400px', lg: '700px' }}>
+      <Stack
+        mb={4}
+        p={3}
+        border='1px'
+        borderRadius={6}
+        w={{ base: 80, md: '400px', lg: '700px' }}
+        _hover={{ bg: '#ebedf0' }}
+      >
         <Heading as='h3' size='md'>
           {info.title}
         </Heading>
