@@ -12,9 +12,11 @@ const TalkDetails = () => {
           {details?.title ? details.title : ''}
         </Heading>
         <Text fontWeight={500} fontSize='lg'>
-          {details.speakers && details.speakers?.length > 1
-            ? details.speakers?.map((speaker: any) => <span>{speaker?.name} & </span>)
-            : details.speakers[0]?.name}
+          {details.speakers && details.speakers.length > 1
+            ? details.speakers.map((speaker: any) => (
+                <span key={speaker.name}>{speaker.name} & </span>
+              ))
+            : details.speakers[0].name}
         </Text>
       </Stack>
 
@@ -28,14 +30,14 @@ const TalkDetails = () => {
 
         <Stack>
           <Heading as='h3' size='md'>
-            {details.speakers && details.speakers?.length > 1 ? 'Biographies' : 'Biography'}
+            {details.speakers && details.speakers.length > 1 ? 'Biographies' : 'Biography'}
           </Heading>
           <Stack>
-            {details.speakers && details.speakers?.length > 1
-              ? details.speakers?.map((speaker: any) => (
-                  <Stack mb={4}>
-                    <Text fontWeight={500}>{speaker?.name}</Text>
-                    <Text>{speaker?.biography}</Text>
+            {details.speakers && details.speakers.length > 1
+              ? details.speakers.map((speaker: any) => (
+                  <Stack key={speaker.name} mb={4}>
+                    <Text fontWeight={500}>{speaker.name}</Text>
+                    <Text>{speaker.biography}</Text>
                   </Stack>
                 ))
               : details.speakers[0].biography}
