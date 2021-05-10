@@ -25,8 +25,6 @@ export const getServerSideProps: GetServerSideProps = async ({}) => {
 const TalkDetails = ({ router, talks }: { router: any; talks: any }) => {
   const details = talks.filter((talk: any) => talk.code === router.query.id)[0];
 
-  console.log(details.speakers[0].biography);
-
   return (
     <Stack p={6}>
       <Stack mb={4} maxW='600px'>

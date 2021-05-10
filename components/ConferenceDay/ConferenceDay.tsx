@@ -17,6 +17,7 @@ const ConferenceDay = ({
       {results
         .filter((res: any) => res.slot.start.includes(date) && res.slot.room.en === room)
         .map((result: any) => {
+          console.log({ result });
           return (
             <Stack key={result.code} alignItems='center'>
               <Talk info={result} />

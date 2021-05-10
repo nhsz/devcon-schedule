@@ -1,4 +1,5 @@
-import { Button, Heading, Stack } from '@chakra-ui/react';
+import { Button, Center, Divider, Heading, Stack, Text } from '@chakra-ui/react';
+import dayjs from 'dayjs';
 import { GetStaticProps } from 'next';
 import Head from 'next/head';
 import { useState } from 'react';
@@ -43,17 +44,31 @@ const Home = ({ results }: { results: any }) => {
         </Stack>
 
         <Layout>
-          <Stack direction='row' spacing={4} justifyContent='center' mb={12}>
-            <Button onClick={() => setSelectedDay(1)} isActive={selectedDay === 1}>
-              Day 1
-            </Button>
-            <Button onClick={() => setSelectedDay(2)} isActive={selectedDay === 2}>
-              Day 2
-            </Button>
-            <Button onClick={() => setSelectedDay(3)} isActive={selectedDay === 3}>
-              Day 3
-            </Button>
+          <Stack mb={2}>
+            <Stack direction='row' spacing={4} justifyContent='center' mb={4}>
+              <Button onClick={() => setSelectedDay(1)} isActive={selectedDay === 1}>
+                Day 1
+              </Button>
+              <Button onClick={() => setSelectedDay(2)} isActive={selectedDay === 2}>
+                Day 2
+              </Button>
+              <Button onClick={() => setSelectedDay(3)} isActive={selectedDay === 3}>
+                Day 3
+              </Button>
+            </Stack>
+
+            <Stack>
+              <Text textAlign='right'>
+                {dayjs(
+                  selectedDay === 1 ? '2020-04-17' : selectedDay === 2 ? '2020-04-18' : '2020-04-19'
+                ).format('MMMM D, YYYY')}
+              </Text>
+            </Stack>
           </Stack>
+
+          <Center mb={12}>
+            <Divider />
+          </Center>
 
           <Stack>
             <Stack mb={12}>
@@ -64,6 +79,10 @@ const Home = ({ results }: { results: any }) => {
               </Stack>
               <ConferenceDay results={results} selectedDay={selectedDay} room='Magenta Room' />
             </Stack>
+
+            <Center mb={12}>
+              <Divider />
+            </Center>
 
             <Stack>
               <Stack direction='row' justifyContent='center' marginTop={6} marginBottom={12}>
