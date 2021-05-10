@@ -1,32 +1,39 @@
-import { Button, Center, Divider, Heading, Stack, Text } from '@chakra-ui/react';
+import { Button, Center, Divider, Heading, Spinner, Stack, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
-import { GetStaticProps } from 'next';
 import Head from 'next/head';
-import { useState } from 'react';
+import { useEffect, useState } from 'react';
 import { ConferenceDay, Layout } from '../components';
 
-export const getStaticProps: GetStaticProps = async context => {
-  const res = await fetch('https://pretalx.com/api/events/democon/talks/');
-  const { next, results } = await res.json();
-  let nextResults = [];
-
-  if (next) {
-    const nextResponse = await fetch('https://pretalx.com/api/events/democon/talks/?offset=25');
-    const { results } = await nextResponse.json();
-    nextResults = results;
-  }
-
-  const criteria = function (a: any, b: any) {
-    return a.slot.start < b.slot.start ? -1 : a.date > b.date ? 1 : 0;
-  };
-
-  return {
-    props: { results: next ? results.concat(nextResults).sort(criteria) : results.sort(criteria) }
-  };
-};
-
-const Home = ({ results }: { results: any }) => {
+const Home = () => {
   const [selectedDay, setSelectedDay] = useState(1);
+  const [results, setResults] = useState([]);
+  const [loading, setLoading] = useState(true);
+
+  useEffect(() => {
+    async function fetchAPI() {
+      const res = await fetch('https://pretalx.com/api/events/democon/talks/');
+      const { next, results } = await res.json();
+      let nextResults = [];
+
+      if (next) {
+        const nextResponse = await fetch('https://pretalx.com/api/events/democon/talks/?offset=25');
+        const { results } = await nextResponse.json();
+        nextResults = results;
+      }
+
+      const criteria = function (a: any, b: any) {
+        return a.slot.start < b.slot.start ? -1 : a.date > b.date ? 1 : 0;
+      };
+
+      const finalResults = next
+        ? results.concat(nextResults).sort(criteria)
+        : results.sort(criteria);
+      setResults(finalResults);
+      setLoading(false);
+    }
+
+    fetchAPI();
+  }, [results, selectedDay]);
 
   return (
     <div>
@@ -77,7 +84,13 @@ const Home = ({ results }: { results: any }) => {
                   Magenta Room
                 </Heading>
               </Stack>
-              <ConferenceDay results={results} selectedDay={selectedDay} room='Magenta Room' />
+              {loading ? (
+                <Center>
+                  <Spinner />
+                </Center>
+              ) : (
+                <ConferenceDay results={results} selectedDay={selectedDay} room='Magenta Room' />
+              )}
             </Stack>
 
             <Center mb={12}>
@@ -90,7 +103,13 @@ const Home = ({ results }: { results: any }) => {
                   Khaki Room
                 </Heading>
               </Stack>
-              <ConferenceDay results={results} selectedDay={selectedDay} room='Khaki Room' />
+              {loading ? (
+                <Center>
+                  <Spinner />
+                </Center>
+              ) : (
+                <ConferenceDay results={results} selectedDay={selectedDay} room='Khaki Room' />
+              )}
             </Stack>
           </Stack>
         </Layout>
