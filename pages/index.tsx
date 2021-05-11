@@ -4,10 +4,15 @@ import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { ConferenceDay, Layout } from '../components';
 
+const filterBy = (results: any[], date: string, room: string) => {
+  return results.filter((res: any) => res.slot.start.includes(date) && res.slot.room.en === room);
+};
+
 const Home = () => {
   const [selectedDay, setSelectedDay] = useState(1);
   const [results, setResults] = useState([]);
   const [loading, setLoading] = useState(true);
+  const date = selectedDay === 1 ? '2020-04-17' : selectedDay === 2 ? '2020-04-18' : '2020-04-19';
 
   useEffect(() => {
     async function fetchAPI() {
@@ -33,7 +38,7 @@ const Home = () => {
     }
 
     fetchAPI();
-  }, [results, selectedDay]);
+  }, [results]);
 
   return (
     <div>
@@ -89,7 +94,7 @@ const Home = () => {
                   <Spinner />
                 </Center>
               ) : (
-                <ConferenceDay results={results} selectedDay={selectedDay} room='Magenta Room' />
+                <ConferenceDay results={filterBy(results, date, 'Magenta Room')} />
               )}
             </Stack>
 
@@ -108,7 +113,7 @@ const Home = () => {
                   <Spinner />
                 </Center>
               ) : (
-                <ConferenceDay results={results} selectedDay={selectedDay} room='Khaki Room' />
+                <ConferenceDay results={filterBy(results, date, 'Khaki Room')} />
               )}
             </Stack>
           </Stack>
