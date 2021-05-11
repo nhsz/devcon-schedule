@@ -7,15 +7,12 @@ const Talk = ({ info }: { info: any }) => {
   const time = new Date(info.slot.start);
 
   return (
-    <Box
-      cursor='pointer'
-      onClick={() => {
-        router.push({ pathname: `/detail/${info.code}` });
-      }}
-      position='relative'
-      mb={1}
-    >
+    <Box position='relative' mb={1}>
       <Stack
+        onClick={() => {
+          router.push({ pathname: `/detail/${info.code}` });
+        }}
+        cursor='pointer'
         mb={4}
         p={3}
         border='1px'

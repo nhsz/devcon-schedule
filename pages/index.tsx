@@ -75,7 +75,7 @@ const Home = () => {
 
           <Divider mb={12} />
 
-          <Stack>
+          <Stack mb={12}>
             <Stack mb={12}>
               <Stack direction='row' justifyContent='center' marginTop={6} marginBottom={12}>
                 <Heading as='h2' size='lg'>
@@ -91,7 +91,9 @@ const Home = () => {
               )}
             </Stack>
 
-            <Divider mb={12} />
+            <Stack>
+              <Divider mb={12} />
+            </Stack>
 
             <Stack>
               <Stack direction='row' justifyContent='center' marginTop={6} marginBottom={12}>
