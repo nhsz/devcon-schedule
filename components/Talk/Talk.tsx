@@ -22,7 +22,7 @@ const Talk: FC<Props> = ({ info }) => {
   return (
     <Stack
       onClick={() => {
-        router.push({ pathname: `/detail/${slugify(title)}` });
+        router.push({ pathname: `/details/${slugify(title)}` });
       }}
       cursor='pointer'
       mb={4}

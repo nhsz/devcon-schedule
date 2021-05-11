@@ -30,7 +30,7 @@ const Layout: FC = ({ children }) => {
             </Box>
 
             <Heading as='h2' size='md'>
-              Devcon 2021
+              Devcon 2020
             </Heading>
           </Stack>
         </Link>
