@@ -3,10 +3,7 @@ import dayjs from 'dayjs';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { ConferenceDay, Layout } from '../components';
-
-const filterBy = (results: any[], date: string, room: string) => {
-  return results.filter((res: any) => res.slot.start.includes(date) && res.slot.room.en === room);
-};
+import { filterBy } from '../utils';
 
 const Home = () => {
   const [selectedDay, setSelectedDay] = useState(1);
@@ -14,31 +11,29 @@ const Home = () => {
   const [loading, setLoading] = useState(true);
   const date = selectedDay === 1 ? '2020-04-17' : selectedDay === 2 ? '2020-04-18' : '2020-04-19';
 
-  useEffect(() => {
-    async function fetchAPI() {
-      const res = await fetch('https://pretalx.com/api/events/democon/talks/');
-      const { next, results } = await res.json();
-      let nextResults = [];
+  const fetchAPI = async () => {
+    const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL ?? '');
+    const { next, results } = await res.json();
+    let nextResults = [];
 
-      if (next) {
-        const nextResponse = await fetch('https://pretalx.com/api/events/democon/talks/?offset=25');
-        const { results } = await nextResponse.json();
-        nextResults = results;
-      }
-
-      const criteria = function (a: any, b: any) {
-        return a.slot.start < b.slot.start ? -1 : a.date > b.date ? 1 : 0;
-      };
-
-      const finalResults = next
-        ? results.concat(nextResults).sort(criteria)
-        : results.sort(criteria);
-      setResults(finalResults);
-      setLoading(false);
+    if (next) {
+      const nextResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}?offset=25`);
+      const { results } = await nextResponse.json();
+      nextResults = results;
     }
 
+    const criteria = function (a: any, b: any) {
+      return a.slot.start < b.slot.start ? -1 : a.date > b.date ? 1 : 0;
+    };
+
+    const finalResults = next ? results.concat(nextResults).sort(criteria) : results.sort(criteria);
+    setResults(finalResults);
+    setLoading(false);
+  };
+
+  useEffect(() => {
     fetchAPI();
-  }, [results]);
+  }, []);
 
   return (
     <div>
@@ -78,9 +73,7 @@ const Home = () => {
             </Stack>
           </Stack>
 
-          <Center mb={12}>
-            <Divider />
-          </Center>
+          <Divider mb={12} />
 
           <Stack>
             <Stack mb={12}>
@@ -98,9 +91,7 @@ const Home = () => {
               )}
             </Stack>
 
-            <Center mb={12}>
-              <Divider />
-            </Center>
+            <Divider mb={12} />
 
             <Stack>
               <Stack direction='row' justifyContent='center' marginTop={6} marginBottom={12}>
