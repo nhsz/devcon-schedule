@@ -1,3 +1,5 @@
-export const filterBy = (results: any[], date: string, room: string) => {
-  return results.filter((res: any) => res.slot.start.includes(date) && res.slot.room.en === room);
+import { Result } from '../types';
+
+export const filterBy = (results: Result[], date: string, room: string) => {
+  return results.filter(res => res.slot.start.includes(date) && res.slot.room.en === room);
 };

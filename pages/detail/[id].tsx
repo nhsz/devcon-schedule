@@ -1,6 +1,8 @@
 import { Button, Heading, Stack, Text } from '@chakra-ui/react';
 import { GetServerSideProps } from 'next';
-import { withRouter } from 'next/router';
+import { NextRouter, withRouter } from 'next/router';
+import { FC } from 'react';
+import { Result, Speaker } from '../../types';
 
 export const getServerSideProps: GetServerSideProps = async ({}) => {
   const res = await fetch('https://pretalx.com/api/events/democon/talks/');
@@ -13,8 +15,8 @@ export const getServerSideProps: GetServerSideProps = async ({}) => {
     nextResults = results;
   }
 
-  const criteria = function (a: any, b: any) {
-    return a.slot.start - b.slot.start;
+  const criteria = function (a: Result, b: Result) {
+    return a.slot.start < b.slot.start ? -1 : a.slot.start > b.slot.start ? 1 : 0;
   };
 
   return {
@@ -22,8 +24,13 @@ export const getServerSideProps: GetServerSideProps = async ({}) => {
   };
 };
 
-const TalkDetails = ({ router, talks }: { router: any; talks: any }) => {
-  const details = talks.filter((talk: any) => talk.code === router.query.id)[0];
+interface Props {
+  router: NextRouter;
+  talks: Result[];
+}
+
+const TalkDetails: FC<Props> = ({ router, talks }) => {
+  const details = talks.filter((talk: Result) => talk.code === router.query.id)[0];
 
   return (
     <Stack p={6}>
@@ -34,7 +41,7 @@ const TalkDetails = ({ router, talks }: { router: any; talks: any }) => {
           </Heading>
           <Text fontSize='2xl'>
             {details.speakers.length > 1
-              ? details.speakers.map((speaker: any, idx: number, arr: any[]) => (
+              ? details.speakers.map((speaker: Speaker, idx: number, arr: Speaker[]) => (
                   <span key={speaker.name}>
                     {speaker.name} {idx < arr.length - 1 ? '&' : ''}{' '}
                   </span>
@@ -56,7 +63,7 @@ const TalkDetails = ({ router, talks }: { router: any; talks: any }) => {
             </Heading>
             <Stack>
               {details.speakers.length > 1 ? (
-                details.speakers.map((speaker: any) => (
+                details.speakers.map((speaker: Speaker) => (
                   <Stack key={speaker.name} mb={4}>
                     <Text fontWeight={500}>{speaker.name}</Text>
                     <Text>{speaker.biography}</Text>

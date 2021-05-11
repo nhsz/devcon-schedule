@@ -1,16 +1,28 @@
 import { Box, Heading, Stack, Text } from '@chakra-ui/react';
 import dayjs from 'dayjs';
 import { useRouter } from 'next/router';
+import { FC } from 'react';
+import { Speaker } from '../../types';
 
-const Talk = ({ info }: { info: any }) => {
+interface Props {
+  info: {
+    time: string;
+    code: string;
+    title: string;
+    speakers: Speaker[];
+  };
+}
+
+const Talk: FC<Props> = ({ info }) => {
   const router = useRouter();
-  const time = new Date(info.slot.start);
+  const { time, code, title, speakers } = info;
+  const talkTime = new Date(time);
 
   return (
     <Box position='relative' mb={1}>
       <Stack
         onClick={() => {
-          router.push({ pathname: `/detail/${info.code}` });
+          router.push({ pathname: `/detail/${code}` });
         }}
         cursor='pointer'
         mb={4}
@@ -21,21 +33,21 @@ const Talk = ({ info }: { info: any }) => {
         _hover={{ bg: '#ebedf0' }}
       >
         <Heading as='h3' size='md'>
-          {info.title}
+          {title}
         </Heading>
         <Text fontWeight={500}>
-          {info.speakers.length > 1
-            ? info.speakers.map((speaker: any, idx: number, arr: any[]) => (
+          {speakers.length > 1
+            ? speakers.map((speaker: Speaker, idx: number, arr: Speaker[]) => (
                 <span key={speaker.name}>
                   {speaker.name} {idx < arr.length - 1 ? '&' : ''}{' '}
                 </span>
               ))
-            : info.speakers[0].name}
+            : speakers[0].name}
         </Text>
 
         <Box position='absolute' bottom={4} right={0} background='black' p={1} w='52px'>
           <Text color='white' textAlign='center'>
-            {dayjs(time).format('HH:mm')}
+            {dayjs(talkTime).format('HH:mm')}
           </Text>
         </Box>
       </Stack>

@@ -3,6 +3,7 @@ import dayjs from 'dayjs';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { ConferenceDay, Layout } from '../components';
+import { Result } from '../types';
 import { filterBy } from '../utils';
 
 const Home = () => {
@@ -22,8 +23,8 @@ const Home = () => {
       nextResults = results;
     }
 
-    const criteria = function (a: any, b: any) {
-      return a.slot.start < b.slot.start ? -1 : a.date > b.date ? 1 : 0;
+    const criteria = function (a: Result, b: Result) {
+      return a.slot.start < b.slot.start ? -1 : a.slot.start > b.slot.start ? 1 : 0;
     };
 
     const finalResults = next ? results.concat(nextResults).sort(criteria) : results.sort(criteria);
