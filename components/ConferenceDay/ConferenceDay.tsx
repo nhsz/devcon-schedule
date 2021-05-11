@@ -10,12 +10,12 @@ interface Props {
 const ConferenceDay: FC<Props> = ({ results }) => {
   return (
     <>
-      {results.map((result: Result) => {
+      {results.map(result => {
         const info = {
           time: result.slot.start,
-          code: result.code,
           title: result.title,
-          speakers: result.speakers
+          speakers: result.speakers,
+          type: result.submission_type
         };
 
         return (
