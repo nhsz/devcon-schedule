@@ -3,32 +3,47 @@ import dayjs from 'dayjs';
 import Head from 'next/head';
 import { useEffect, useState } from 'react';
 import { ConferenceDay, Layout } from '../components';
+import { useTalksStore } from '../store';
+import { Talks } from '../types';
 import { criteria, filterBy } from '../utils';
 
 const Home = () => {
   const [selectedDay, setSelectedDay] = useState(1);
-  const [results, setResults] = useState([]);
+  const [results, setResults] = useState<Talks>([]);
   const [loading, setLoading] = useState(true);
+  const [error, setError] = useState<string | null>(null);
+  const [talks, setTalks] = useTalksStore(state => [state.talks, state.setTalks]);
   const date = selectedDay === 1 ? '2020-04-17' : selectedDay === 2 ? '2020-04-18' : '2020-04-19';
 
-  const fetchAPI = async () => {
-    const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL ?? '');
-    const { next, results } = await res.json();
-    let nextResults = [];
-
-    if (next) {
-      const nextResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}?offset=25`);
-      const { results } = await nextResponse.json();
-      nextResults = results;
-    }
-
-    const finalResults = next ? results.concat(nextResults).sort(criteria) : results.sort(criteria);
-    setResults(finalResults);
+  if (talks.length && !results.length) {
+    setResults(talks);
     setLoading(false);
+  }
+
+  const fetchAPI = async () => {
+    try {
+      const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL ?? '');
+      const { next, results } = await res.json();
+      let nextResults = [];
+
+      if (next) {
+        const nextResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}?offset=25`);
+        const { results } = await nextResponse.json();
+        nextResults = results;
+      }
+
+      const finalResults = next
+        ? results.concat(nextResults).sort(criteria)
+        : results.sort(criteria);
+      setTalks(finalResults);
+      setLoading(false);
+    } catch (err) {
+      setError(err);
+    }
   };
 
   useEffect(() => {
-    fetchAPI();
+    if (!talks.length) fetchAPI();
   }, []);
 
   return (
@@ -92,35 +107,45 @@ const Home = () => {
           </Stack>
 
           <Stack mb={12}>
-            <Stack mb={16}>
-              <Stack direction='row' justifyContent='center' marginTop={6} marginBottom={12}>
-                <Heading as='h2' size='lg'>
-                  Magenta Room
-                </Heading>
-              </Stack>
-              {loading ? (
-                <Center>
-                  <Spinner />
-                </Center>
-              ) : (
-                <ConferenceDay results={filterBy(results, date, 'Magenta Room')} />
-              )}
-            </Stack>
+            {error && (
+              <Center>
+                <Text>Oops, something went wrong!</Text>
+              </Center>
+            )}
 
-            <Stack>
-              <Stack direction='row' justifyContent='center' marginTop={6} marginBottom={12}>
-                <Heading as='h2' size='lg'>
-                  Khaki Room
-                </Heading>
+            {!error && (
+              <Stack mb={16}>
+                <Stack direction='row' justifyContent='center' marginTop={6} marginBottom={12}>
+                  <Heading as='h2' size='lg'>
+                    Magenta Room
+                  </Heading>
+                </Stack>
+                {loading ? (
+                  <Center>
+                    <Spinner />
+                  </Center>
+                ) : (
+                  <ConferenceDay results={filterBy(results, date, 'Magenta Room')} />
+                )}
               </Stack>
-              {loading ? (
-                <Center>
-                  <Spinner />
-                </Center>
-              ) : (
-                <ConferenceDay results={filterBy(results, date, 'Khaki Room')} />
-              )}
-            </Stack>
+            )}
+
+            {!error && (
+              <Stack>
+                <Stack direction='row' justifyContent='center' marginTop={6} marginBottom={12}>
+                  <Heading as='h2' size='lg'>
+                    Khaki Room
+                  </Heading>
+                </Stack>
+                {loading ? (
+                  <Center>
+                    <Spinner />
+                  </Center>
+                ) : (
+                  <ConferenceDay results={filterBy(results, date, 'Khaki Room')} />
+                )}
+              </Stack>
+            )}
           </Stack>
         </main>
       </Layout>

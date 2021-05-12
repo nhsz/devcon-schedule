@@ -3,31 +3,23 @@ import { GetServerSideProps } from 'next';
 import { NextRouter, withRouter } from 'next/router';
 import { FC } from 'react';
 import { Layout } from '../../components';
-import { Result, Speaker } from '../../types';
-import { criteria, slugify } from '../../utils';
+import { useTalksStore } from '../../store';
+import { Speaker } from '../../types';
+import { slugify } from '../../utils';
 
-export const getServerSideProps: GetServerSideProps = async ({}) => {
-  const res = await fetch(process.env.NEXT_PUBLIC_BASE_URL ?? '');
-  const { next, results } = await res.json();
-  let nextResults = [];
-
-  if (next) {
-    const nextResponse = await fetch(`${process.env.NEXT_PUBLIC_BASE_URL}?offset=25`);
-    const { results } = await nextResponse.json();
-    nextResults = results;
-  }
-
+export const getServerSideProps: GetServerSideProps = async () => {
   return {
-    props: { talks: next ? results.concat(nextResults).sort(criteria) : results.sort(criteria) }
+    props: {}
   };
 };
 
 interface Props {
   router: NextRouter;
-  talks: Result[];
 }
 
-const TalkDetails: FC<Props> = ({ router, talks }) => {
+const TalkDetails: FC<Props> = ({ router }) => {
+  const talks = useTalksStore(state => state.talks);
+
   const details = talks.filter(talk => {
     const slug = slugify(talk.title);
     return slug === router.query.slug;

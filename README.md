@@ -32,3 +32,4 @@ I've iterated over the layout, components structure and improved the typings and
 
 - React + NextJS + TypeScript
 - ChakraUI for components UI
+- Zustand for server state caching
