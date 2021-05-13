@@ -39,3 +39,5 @@ export interface Result {
     description: string;
   };
 }
+
+export type Talks = Result[];
