@@ -19,7 +19,7 @@ npm run start
 
 ## Live deployment
 
-[demo](https://devcon-challenge.vercel.app/)
+[demo](https://devcon-schedule.vercel.app/)
 
 ## Stack used
 
